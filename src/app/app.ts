@@ -1,18 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
-import { Punto1 } from './components/punto1/punto1';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [ Header, Punto1, Footer],
+  imports: [RouterModule, Header, Footer],
   styleUrl: './app.css',
   template : `
     <header>
       <app-header/>
     </header>
     <main class="my-3">
-      <app-punto1></app-punto1>
+      <router-outlet/>
     </main>
     <footer>
       <app-footer/>
