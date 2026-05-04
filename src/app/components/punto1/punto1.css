@@ -1,0 +1,21 @@
+/* Altura para pantallas grandes (PC) */
+.carousel-img {
+    height: 65vh; /* 60% del alto de la pantalla */
+    min-height: 400px;
+    object-fit: cover;
+}
+
+/* Altura para pantallas chicas (Celulares - menos de 768px) */
+@media (max-width: 767px) {
+    .carousel-img {
+        height: 250px; /* Mucho más corta para que no tape todo el celular */
+    }
+    
+    .carousel-caption h5 {
+        font-size: 1rem; /* Achicamos un poco la letra para que entre bien */
+    }
+    
+    .carousel-caption p {
+        font-size: 0.8rem;
+    }
+}

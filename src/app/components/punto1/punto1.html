@@ -1,0 +1,39 @@
+<h2 class="text-center fw-bold">Eventos Destacados</h2>
+<div id="carouselExampleCaptions" class="carousel slide shadow-lg" data-bs-ride="carousel">
+
+    <!-- Indicadores Dinámicos -->
+    <div class="carousel-indicators">
+        @for (evento of eventos; track $index) {
+        <button type="button" data-bs-target="#carouselExampleCaptions" [attr.data-bs-slide-to]="$index"
+            [class.active]="$index === 0" [aria-current]="$index === 0" [attr.aria-label]="'Slide ' + ($index + 1)">
+        </button>
+        }
+    </div>
+
+    <!-- Contenedor Único -->
+    <div class="carousel-inner">
+    @for (evento of eventos; track $index) {
+    <div class="carousel-item" [class.active]="$index === 0">
+        <!-- Cambiamos el style para que use 'vh' (porcentaje de pantalla) -->
+        <img [src]="evento.foto" 
+             class="d-block w-100 carousel-img" 
+             [alt]="evento.nombre">
+
+        <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-2 p-md-3">
+            <h5 class="fw-bold">{{evento.nombre}}</h5>
+            <p class="small mb-0">{{evento.descripcion}}</p>
+        </div>
+    </div>
+    }
+</div>
+
+    <!-- Controles -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+    </button>
+</div>
