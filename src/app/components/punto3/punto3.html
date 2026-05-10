@@ -1,0 +1,47 @@
+<div class="container py-5 text-center">
+    <h2 class="text-primary fw-bold mb-4">Juego de Memoria Musical</h2>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8 bg-dark text-white p-4 rounded-4 shadow-lg border border-primary border-opacity-25">
+            <div class="d-flex justify-content-around align-items-center">
+                <div>
+                    <p class="text-secondary mb-0 small">INTENTOS RESTANTES</p>
+                    <h2 class="text-warning fw-bold mb-0">{{ intentos }}</h2>
+                </div>
+                <div class="vr"></div>
+                <div class="d-flex gap-3">
+                    <button class="btn btn-lg btn-success px-4 shadow-sm" (click)="iniciarJuego()"
+                        [disabled]="juegoIniciado">
+                        <i class="bi bi-play-fill"></i> INICIAR
+                    </button>
+                    <button class="btn btn-primary" (click)="habilitarIntento()"
+                        [disabled]="!juegoIniciado || intentoHabilitado || intentos === 0">
+                        INTENTAR
+                    </button>
+                    <button class="btn btn-lg btn-danger px-4 shadow-sm" (click)="inicializarTablero()">
+                        <i class="bi bi-arrow-counterclockwise"></i> REINICIAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4 justify-content-center mx-auto"
+        style="max-width: 900px;">
+        @for (carta of cartas; track $index) {
+        <div class="col">
+            <div class="memo-card shadow" [class.flipped]="carta.visible || carta.emparejada"
+                (click)="voltearCarta(carta)">
+                <div class="memo-card-inner">
+                    <div class="memo-card-front bg-gradient-dark text-white shadow-inner">
+                        <i class="bi bi-music-note-beamed text-primary opacity-50 display-3"></i>
+                    </div>
+                    <div class="memo-card-back bg-white border-primary border-3">
+                        <span class="display-3">{{ carta.valor }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
