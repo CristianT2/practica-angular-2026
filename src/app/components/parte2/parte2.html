@@ -1,0 +1,131 @@
+<div class="container mt-4">
+    <div class="card p-4 shadow-sm border-0 bg-light">
+        <h3 class="text-primary mb-4">Nueva Inscripción</h3>
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">DNI</label>
+                <input type="text" class="form-control" [(ngModel)]="nuevaInscripcion.dni" name="dni">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Email</label>
+                <input type="email" class="form-control" [(ngModel)]="nuevaInscripcion.email" name="email">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Curso</label>
+                <input type="text" class="form-control" [(ngModel)]="nuevaInscripcion.curso" name="curso">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Precio del Curso</label>
+                <input type="number" class="form-control" [(ngModel)]="nuevaInscripcion.precio"
+                    (change)="calcularPrecioFinal()" name="precio">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Categoría de Alumno</label>
+                <select class="form-select" [(ngModel)]="nuevaInscripcion.categoriaAlumno"
+                    (change)="calcularPrecioFinal()" name="categoria">
+                    <option value="0">Seleccione una opción...</option>
+                    <option value="1">Estudiante (35% Desc)</option>
+                    <option value="2">Egresado (50% Desc)</option>
+                    <option value="3">Particular (Sin Desc)</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Fecha de Inscripción</label>
+                <input type="date" class="form-control" [(ngModel)]="fechaString" name="fecha">
+            </div>
+
+            @if (nuevaInscripcion.precio > 0 && nuevaInscripcion.categoriaAlumno > 0) {
+            <div class="col-12">
+                <div class="alert alert-info py-2 shadow-sm border-info">
+                    <strong>Monto Total a Abonar: </strong>
+                    <span class="fs-4">{{ precioFinal | currency:'$ ' }}</span>
+                </div>
+            </div>
+            }
+
+            <div class="col-12 mt-3 text-end">
+                <button class="btn btn-primary btn-lg px-5 shadow" (click)="registrar()">
+                    {{ indiceEditando === -1 ? 'REGISTRAR' : 'GUARDAR CAMBIOS' }}
+                </button>
+                @if (indiceEditando !== -1) {
+                <button class="btn btn-outline-secondary btn-lg ms-2" (click)="resetearFormulario()">CANCELAR</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="card shadow-sm overflow-hidden">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>DNI</th>
+                    <th>Curso</th>
+                    <th>Categoría</th>
+                    <th>Fecha</th>
+                    <th>Total Final</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of inscripcionService.obtenerInscripciones(); track item.dni) {
+                <tr>
+                    <td>{{ item.dni }}</td>
+                    <td>{{ item.curso }}</td>
+                    <td>
+                        @if (item.categoriaAlumno == 1) { <span class="badge bg-info text-dark">Estudiante</span> }
+                        @else if (item.categoriaAlumno == 2) { <span class="badge bg-success">Egresado</span> }
+                        @else if (item.categoriaAlumno == 3) { <span class="badge bg-secondary">Particular</span> }
+                        @else { <span class="badge bg-danger">No definido</span> }
+                    </td>
+                    <td>{{ item.fechaInscripcion | date:'dd/MM/yyyy' }}</td>
+                    <td class="fw-bold">
+                        {{ inscripcionService.obtenerPrecioConDescuento(item.precio, item.categoriaAlumno) |
+                        currency:'$ ' }}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2" (click)="prepararEdicion(item, $index)">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="eliminar($index)">
+                            <i class="bi bi-trash"></i> Borrar
+                        </button>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="5" class="text-center py-4">No hay inscripciones registradas.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="p-3 bg-white border rounded shadow-sm">
+                <h5 class="text-muted border-bottom pb-2">Resumen por Categoría</h5>
+                <div class="d-flex justify-content-between px-3">
+                    <span>Estudiantes: <strong>{{ inscripcionService.obtenerEstadisticas().estudiantes}}</strong></span>
+                    <span>Egresados: <strong>{{ inscripcionService.obtenerEstadisticas().egresados}}</strong></span>
+                    <span>Particulares: <strong>{{
+                            inscripcionService.obtenerEstadisticas().particulares}}</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-primary text-white rounded shadow-sm d-flex flex-column align-items-center">
+                <small class="opacity-75">RECAUDACIÓN TOTAL</small>
+                <h4 class="mb-0 fw-bold">{{ inscripcionService.obtenerEstadisticas().totalRecaudado| currency:'$ ' }}
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
